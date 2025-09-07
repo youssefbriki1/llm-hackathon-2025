@@ -60,3 +60,41 @@ The core computational tasks are:
 7) Compute the Hessian matrix and diagonalize it to get phonon modes.
 8) Compute the polarizability tensor at displaced geometries along the phonon modes.
 9) Calculate and plot raman intensities.
+
+
+# Project teams
+
+A (tentative) identification of the project subteams
+
+1. Docs + Validation Team
+Feed the AI with knowledge and define how to measure success.
+Curate tutorials URL content (BigDFT-school, remotemanager, PyBigDFT docs)
+Prepare docs/URL/html for RAG ingestion (chunking, metadata)
+Define 3–4 validation tests (HCN frequencies, atomisation energies, vibrational/Raman tasks)
+Provide ground truth input/output files
+Maintain a notebook harness for comparison (baseline vs LLM output)
+Document doc gaps + guidelines for “LLM-friendly” code
+2. AI / Agent Team
+2a. RAG & Interface
+Build RAG pipeline (indexing docs, retrieval)
+Design user interface (Jupyter notebook or lightweight frontend)
+Implement augmentation loop: LLM must justify code with docs
+Ensure reproducible runs on small tasks
+2b. Agent Definition & Integration
+Define agent roles:
+Domain agent → interprets query, generates PyBigDFT functions
+HPC agent → wraps into remotemanager jobs & submits
+Validator agent → checks against ground truth, dry-run submission (according to doc)
+Integrate with Docs+Validation team to align on tests & benchmarks
+Prototype multi-agent scheduling (domain agent → HPC agent)
+3. HPC & Workflow Team
+Ensure real runs on supercomputers.
+Wrap PyBigDFT tasks into remotemanager functions
+Test remotemanager job submission & retrieval (dataset API, sanzu jupyter magic)
+Run at least one validation case (HCN) end-to-end (identify HPC resources)
+Support agent team with production case execution
+4. Presentation Team
+Draft Project main board (Motivation / Problem / Hackathon Target / Team) - miro? other?
+Build slides + demo notebook
+demo video (record workflow run) - the deliverable of the hackaton
+Rehearse final pitch
