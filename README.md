@@ -8,8 +8,8 @@ By leveraging the **PyBigDFT Python API**, the **remotemanager** library for job
 Electronic-structure codes remain challenging to use, especially on HPC systems where job submission and post-processing require technical expertise. LLMs are progressing rapidly as assistants, but their effectiveness depends heavily on how code and documentation are structured. Our project investigates **how to write documentation that makes scientific codes “LLM-friendly.”**
 
 ## Impact
-* **For researchers:** Reduce the barrier to using electronic-structure codes on HPC.
-* **For developers:** Concrete guidelines on how to structure documentation so that AI agents can * effectively interact with complex scientific codes.
+* **For researchers:** Reduce the barrier to using electronic-structure codes on HPC and open new research paradigma enabled by the seamlessly integration of LLM.
+* **For developers:** Concrete guidelines on how to structure documentation so that AI agents can effectively interact with complex scientific codes.
 * **For the hackathon:** A case study showing that the quality of documentation can be as important as the quality of code in enabling AI-assisted discovery.
 * **Long-term vision:** Documentation practices derived here could generalize to other simulation packages (chemistry, materials, physics).
 
