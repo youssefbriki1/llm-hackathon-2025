@@ -7,6 +7,12 @@ By leveraging the **PyBigDFT Python API**, the **remotemanager** library for job
 ## Motivation
 Electronic-structure codes remain challenging to use, especially on HPC systems where job submission and post-processing require technical expertise. LLMs are progressing rapidly as assistants, but their effectiveness depends heavily on how code and documentation are structured. Our project investigates **how to write documentation that makes scientific codes “LLM-friendly.”**
 
+## Impact
+* **For researchers:** Reduce the barrier to using electronic-structure codes on HPC.
+* **For developers:** Concrete guidelines on how to structure documentation so that AI agents can * effectively interact with complex scientific codes.
+* **For the hackathon:** A case study showing that the quality of documentation can be as important as the quality of code in enabling AI-assisted discovery.
+* **Long-term vision:** Documentation practices derived here could generalize to other simulation packages (chemistry, materials, physics).
+
 ## Technical Approach
 * **Target tasks**
   * Compute atomisation energies of small molecules.
@@ -26,12 +32,6 @@ Electronic-structure codes remain challenging to use, especially on HPC systems 
 ## Prototype
 * A notebook-based prototype where users define a scientific goal (e.g., vibrational spectrum of N₂) and an LLM assistant orchestrates the PyBigDFT workflow end-to-end on HPC.
 * Parallel benchmarks across models and documentation variants to measure robustness.
-
-## Impact
-* **For researchers:** Reduce the barrier to using electronic-structure codes on HPC.
-* **For developers:** Concrete guidelines on how to structure documentation so that AI agents can * effectively interact with complex scientific codes.
-* **For the hackathon:** A case study showing that the quality of documentation can be as important as the quality of code in enabling AI-assisted discovery.
-* **Long-term vision:** Documentation practices derived here could generalize to other simulation packages (chemistry, materials, physics).
 
 ## Immediate Augmented Knowledge Agent (IAKA)
 
