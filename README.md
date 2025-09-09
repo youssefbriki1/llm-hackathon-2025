@@ -184,7 +184,7 @@ The system is considered successful if:
   * Scripts for job submission/retrieval on cluster - secure some remote resources
 
 
-### Team 4 – Presentation
+### Team 4 – Dissemination
 *Build storyboard, slides, demo, and final pitch. Here we should make sure the **story of the project is clear, engaging, and compelling** for the hackathon jury. We’ll turn the technical work of the other teams into a narrative with visuals, demos, and a strong pitch.*
 
 * **Members:** Cinthya (please confirm?), Abdul, Leonid, Giuseppe, Luigi
@@ -202,7 +202,7 @@ The system is considered successful if:
   * Wrap-up guidelines for LLM-friendly documentation
 
 * **What we can do:**
-  * Create `/4-presentation/` folder in repo (for slides, assets, demo script).
+  * Create `/4-dissemination/` folder in repo (for slides, assets, demo script).
   * Correct/complete first version of the Miro board (based on hackathon submission format).
   * Write down some prose defining the project narrative to orient the presentation
   * Collect **figures, diagrams, and snippets** from Teams 1–3 as they progress.
