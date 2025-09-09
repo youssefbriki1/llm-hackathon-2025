@@ -1,0 +1,3 @@
+[submodule "MCP-remotemanager"]
+	path = MCP-remotemanager
+	url = https://github.com/ljbeal/MCP-remotemanager.git
