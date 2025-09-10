@@ -1,5 +1,5 @@
 [submodule "MCP-remotemanager"]
-	path = MCP-remotemanager
+	path = 2-aiengine/MCP-remotemanager
 	url = https://github.com/ljbeal/MCP-remotemanager.git
 [submodule "2-aiengine/OntoFlow"]
 	path = 2-aiengine/OntoFlow
