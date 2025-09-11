@@ -4,3 +4,4 @@
 [submodule "2-aiengine/OntoFlow"]
 	path = 2-aiengine/OntoFlow
 	url = https://github.com/Yopla38/OntoFlow
+	branch = master
