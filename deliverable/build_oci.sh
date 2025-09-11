@@ -13,7 +13,8 @@ echo "INFO: Installing dependencies..."
 buildah run "${container}" -- apt-get update -y
 buildah run "${container}" -- bash -c "DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt -y install tzdata"
 buildah run "${container}" -- apt-get update -y
-buildah run "${container}" -- apt-get install -y --no-install-recommends python3 git sudo curl ca-certificates
+# python3-venv for Yoann’s code.
+buildah run "${container}" -- apt-get install -y --no-install-recommends python3 git sudo curl ca-certificates python3-venv
 
 echo "INFO: Configuring image..."
 
