@@ -1,6 +1,6 @@
-= Deliverable
+# Deliverable
 
-== Using the project
+## Using the project
 
 Get the OCI image from a repository, or build it with the script `build_oci.sh`.
 
@@ -15,7 +15,7 @@ Then the script `Only_RAG.py` should work:
 python3 -m Only_RAG
 ```
 
-== For developpers
+### For developpers
 
 To obtain latest version of the code and its dependencies:
 ```bash
