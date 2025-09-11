@@ -1,10 +1,10 @@
-= Deliverable
+# Deliverable
 
-== Using the project
+## Using the project
 
 Get the OCI image from a repository, or build it with the script `build_oci.sh`.
 
-=== Using OpenAI/Anthropic
+### Using OpenAI/Anthropic
 
 To test that everything is working, first make sure you have a `keys` folders with OpenAI
 (for embeddings) and Anthropic keys (for structured responses) and run `podman`:
@@ -17,7 +17,7 @@ Then the script `Only_RAG.py` should work:
 python3 -m Only_RAG
 ```
 
-=== Using a local GPU
+### Using a local GPU
 
 The easiest way is to use Apptainer. We assume you have a SIF image. Then
 ```
@@ -25,7 +25,7 @@ apptainer run --containall --nv --writable-tmpfs ontoflow.sif bash
 cd /work
 ```
 
-== For developpers
+## For developpers
 
 To obtain latest version of the code and its dependencies:
 ```bash
