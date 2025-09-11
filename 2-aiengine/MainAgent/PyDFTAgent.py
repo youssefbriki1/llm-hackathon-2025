@@ -4,7 +4,7 @@ from langgraph.prebuilt import create_react_agent, ToolNode, InjectedState
 from langgraph_supervisor import create_supervisor
 from langchain_openai import ChatOpenAI
 from pydantic import BaseModel, Field, field_validator, ConfigDict, PrivateAttr
-from typing import List, Any, Optional, Dict, Annotated
+from typing import List, Any, Optional, Dict, Annotated, Literal
 from langchain.tools.retriever import create_retriever_tool
 from langchain_core.retrievers import BaseRetriever
 from langchain_core.language_models.chat_models import BaseChatModel
@@ -70,6 +70,20 @@ def search_recall_memories(query: str, config: RunnableConfig) -> List[str]:
     return [document.page_content for document in documents]
 
 
+
+@tool
+def transform_query(query: str, mode:Literal[''], config: RunnableConfig) -> str:
+    """Transform the query to be more suitable for retrieval."""
+    prompt = ChatPromptTemplate.from_template(
+        "Rewrite the following query to be more specific and detailed for document retrieval: {query}"
+    )
+    response = config.llm.invoke(prompt.format_messages(query=query))
+    return response.content
+    
+    
+@tool
+def rerank(query:str, retrieved:Any):
+    pass  # to define scheme
 # Agent utils
 
 def create_task_description_handoff_tool(*, agent_name, description=None):
@@ -123,6 +137,7 @@ async def aremoterun_tool(
     function_args: Optional[Dict[str, Any]] = None
 ) -> Any:
     pass
+
 
 
 
@@ -293,5 +308,27 @@ if __name__ == "__main__":
     )
     agent.draw_image()
     agent.run("tell me about python programming language")
+    
+    
+
+# TODO: Question to ask the agent
+"""
+
+The atomization energy of a molecule is the amount of energy required to break it apart completely into its constituent atoms, all taken in their neutral ground states. In practice, it measures how strongly the atoms are bound together within the molecule.
+
+To calculate it, one considers the total energy of the isolated molecule and compares it with the sum of the energies of the individual atoms that compose it. The difference between these two quantities gives the atomization energy. If the energy of the separated atoms is higher than that of the molecule, the atomization energy is positive, meaning that energy must be supplied to dissociate the molecule into free atoms.
+
+In computational chemistry, this is usually obtained by first computing the ground-state energy of the molecule with the chosen method, and then performing the same calculation for each isolated atom in its most stable electronic configuration. The difference reflects the stabilization that results from forming bonds.
+
+
+
+
+# Futur review 
+9:23
+Given such a definitiion, can you write me a python function which calculates the atomization energy of the HCN molecule with PyBigDFT?
+
+"""
+
+# TODO: Ask the agent to write me a python function which calculates that calculates the energy 
     
     
