@@ -13,7 +13,7 @@ echo "INFO: Installing dependencies..."
 buildah run "${container}" -- apt-get update -y
 buildah run "${container}" -- bash -c "DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt -y install tzdata"
 buildah run "${container}" -- apt-get update -y
-buildah run "${container}" -- apt-get install -y --no-install-recommends python3 python3-pip python3-venv git sudo curl
+buildah run "${container}" -- apt-get install -y --no-install-recommends python3 git sudo curl ca-certificates
 
 echo "INFO: Configuring image..."
 
@@ -30,24 +30,22 @@ buildah run "${container}" -- conda install -c conda-forge bigdft-suite -y
 
 # Installing Aider
 buildah config --env PATH=/root/.local/bin:$PATH "${container}"
-buildah run "${container}" -- pip install --break-system-packages aider-install
-buildah run "${container}" -- aider-install
+buildah run "${container}" -- /opt/conda/bin/pip install aider-install
+buildah run "${container}" -- /opt/conda/bin/aider-install
 
 # Installing PyBigDFT
 buildah run "${container}" -- git clone https://gitlab.com/luigigenovese/bigdft-suite.git
 buildah config --workingdir /bigdft-suite "${container}"
-buildah run "${container}" -- pip install --break-system-packages -e PyBigDFT
+buildah run "${container}" -- /opt/conda/bin/pip install -e PyBigDFT
 
 # Installing hackathon and OntoFlow
 buildah config --workingdir /work "${container}"
 buildah run "${container}" -- git clone --recurse-submodules https://github.com/BigDFT-group/llm-hackathon-2025 /work/.
-buildah run "${container}" -- pip install --break-system-packages -r 2-aiengine/OntoFlow/agent/requirements.txt
+buildah run "${container}" -- /opt/conda/bin/pip install -r 2-aiengine/OntoFlow/agent/requirements.txt
 
 # Installing MCP
-buildah run "${container}" -- bash -c "curl -LsSf https://astral.sh/uv/install.sh | sh"
 buildah config --workingdir /work/2-aiengine/MCP-remotemanager "${container}"
-buildah run "${container}" -- uv venv
-buildah run "${container}" -- uv pip install -e .
+buildah run "${container}" -- /opt/conda/bin/pip install -e .
 
 buildah config --workingdir /work "${container}"
 
