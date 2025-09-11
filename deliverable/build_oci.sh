@@ -24,9 +24,9 @@ buildah run "${container}" -- aider-install
 echo "INFO: Configuring image..."
 
 buildah config --workingdir /work "${container}"
-buildah run "${container}" -- git clone https://github.com/Yopla38/OntoFlow /work/.
+buildah run "${container}" -- git clone --recurse-submodules https://github.com/BigDFT-group/llm-hackathon-2025 /work/.
 
-buildah run "${container}" -- pip install --break-system-packages -r agent/requirements.txt
+buildah run "${container}" -- pip install --break-system-packages -r 2-aiengine/OntoFlow/agent/requirements.txt
 
 echo "INFO: Committing the image..."
 
