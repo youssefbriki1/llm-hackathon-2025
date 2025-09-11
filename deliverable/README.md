@@ -30,6 +30,9 @@ cd /work
 To obtain latest version of the code and its dependencies:
 ```bash
 git clone https://github.com/BigDFT-group/llm-hackathon-2025
+cd llm-hackathon-2025
 git submodule init
-git submodule update --remote --merge
+git submodule update --remote [--merge]
 ```
+`--merge` at the end is if you want to update the main repository if there is a newer version of a submodule.
+These commands should always be run from `llm-hackathon-2025`.
