@@ -199,11 +199,49 @@ import asyncio
 
 async def async_test():
     res = await remote_run_code.ainvoke({
-        "function_source": "def f(x): return x*2",
+        "function_source": """def f(x):
+            return x*2""",
         "hostname": "localhost",
         "function_args": {"x": 21}
     })
     print(res)
+    
+"""
+    
+import asyncio
+from langchain_openai import ChatOpenAI
+from langgraph.prebuilt import create_react_agent
+
+async def main():
+    model = ChatOpenAI(model="gpt-4o", temperature=0)
+    agent = create_react_agent(
+        model=model,
+        tools=[remote_run_code],
+        prompt="You can execute remote Python functions using the tool when asked.",
+        name="remotemanager_agent",
+    )
+    res = await agent.ainvoke({
+        "messages": [{
+            "role": "user",
+            "content": (
+                "Use the remote_run_code tool to run this on 'localhost': "
+                "function_source='def f(x):\\n    return x*2', function_args={'x': 21}"
+            )
+        }]
+    })
+    print(res)
+
+    
+
+
 
 if __name__ == "__main__":
+    print("Async test of remote_run_code tool:")
     asyncio.run(async_test())
+    from langchain_openai import ChatOpenAI
+    from langgraph.prebuilt import create_react_agent
+
+    print("\n\n\n\n\n\n\n\n\n --------------------------------------")
+    asyncio.run(main())
+
+"""
