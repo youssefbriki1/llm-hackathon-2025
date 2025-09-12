@@ -44,10 +44,8 @@ buildah config --workingdir /work "${container}"
 buildah run "${container}" -- git clone --recurse-submodules https://github.com/BigDFT-group/llm-hackathon-2025 /work/.
 buildah run "${container}" -- /opt/conda/bin/pip install -r 2-aiengine/OntoFlow/agent/requirements.txt
 
-# Installing MCP
-buildah config --workingdir /work/2-aiengine/MCP-remotemanager "${container}"
+# Installing BigDFT validator and runner
 buildah run "${container}" -- /opt/conda/bin/pip install langgraph langgraph-supervisor langchain-openai langchain dotenv remotemanager
-buildah run "${container}" -- /opt/conda/bin/pip install -e .
 
 # Jupyter Lab for the interface.
 buildah run "${container}" -- /opt/conda/bin/pip install jupyterlab
