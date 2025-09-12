@@ -2,6 +2,7 @@
 main.py
 Tasks.md
 *.log
+BigDFT_log.yaml
 
 # checkpoint/cache files
 .ipynb_checkpoints/
