@@ -1,89 +1,21 @@
-# LARA-HPC: LArge Language Model powered HPC Research Assistant: Testing Documentation-Driven Code Interaction for PyBigDFT and remotemanager
+# LARA-HPC: A LAnguage model-powered Research Assistant for HPC
 
-## Abstract
-We propose to build an LLM-driven research assistant that can run realistic electronic-structure simulations on High-Performance Computing (HPC) systems using the **BigDFT** code. Instead of designing a new agent framework, our focus is to explore how **documentation and code structure** affect the ability of LLMs to understand, extend and orchestrate workflows.
+Electronic-structure codes remain challenging to use, especially on High-Performance Computing (HPC) systems where job submission and post-processing require technical expertise. LLMs are progressing rapidly as assistants, but their effectiveness depends heavily on how code and documentation are structured. Our project investigates **how to write documentation that makes scientific codes “LLM-friendly.”**
+
+We propose to build an LLM-driven research assistant that can run realistic electronic-structure simulations on HPC systems using the **BigDFT** code. Instead of designing a new agent framework, our focus is to explore how **documentation and code structure** affect the ability of LLMs to understand, extend and orchestrate workflows.
 By leveraging the **PyBigDFT Python API**, the **remotemanager** library for job submission, and the **BigDFT-school** educational repository, we will test how well models can autonomously perform tasks such as computing atomisation energies or vibrational spectra. Our hypothesis: **a codebase with clean, Pythonic APIs and high-quality documentation will enable LLMs to perform complex tasks with minimal intervention.**
 
-## Motivation
-Electronic-structure codes remain challenging to use, especially on HPC systems where job submission and post-processing require technical expertise. LLMs are progressing rapidly as assistants, but their effectiveness depends heavily on how code and documentation are structured. Our project investigates **how to write documentation that makes scientific codes “LLM-friendly.”**
-
-## Impact
 * **For researchers:** Reduce the barrier to using electronic-structure codes on HPC and open new research paradigma enabled by the seamlessly integration of LLM.
 * **For developers:** Concrete guidelines on how to structure documentation so that AI agents can effectively interact with complex scientific codes.
 * **For the hackathon:** A case study showing that the quality of documentation can be as important as the quality of code in enabling AI-assisted discovery.
 * **Long-term vision:** Documentation practices derived here could generalize to other simulation packages (chemistry, materials, physics).
-
-## Technical Approach
-* **Target tasks**
-  * Compute atomisation energies of small molecules.
-  * Run vibrational spectrum calculations.
-* **Workflow decomposition**
-  * Break each task into input preparation, execution, log parsing and post-processing.
-* **Testing with LLMs**
-  * Benchmark multiple LLMs using Retrieval-Augmented Generation (RAG) over PyBigDFT documentation + BigDFT-school tutorials.
-  * First test models on subtasks, then escalate to planning agents.
-* **Documentation-driven learning**
-  * Identify where models fail due to missing or unclear docs.
-  * Iteratively improve PyBigDFT documentation (type hints, docstrings, examples, better structure).
-* **HPC integration**
-  * Use **remotemanager** to run jobs on remote clusters and supercomputers.
-  * Leverage its `Dataset` abstraction and Jupyter magics (`%%sanzu`) for notebook-based experimentation.
-
-## Prototype
-* A notebook-based prototype where users define a scientific goal (e.g., vibrational spectrum of N₂) and an LLM assistant orchestrates the PyBigDFT workflow end-to-end on HPC.
-* Parallel benchmarks across models and documentation variants to measure robustness.
-
-## Immediate Augmented Knowledge Agent (IAKA)
-
-To support the goals of this project, we envision an Immediate Augmented Knowledge Agent (IAKA): a system that, when provided with external scientific and computational documentation, can compose new algorithms that it otherwise could not have generated with its baseline knowledge.
-Is not just "RAG with coding" — but an **enforced augmentation loop** where the LLM is compelled to *study and model new knowledge before coding*.
-
-### **Workflow**
-
-1. **User request**
-
-   * Input: *Natural language request for an algorithm*.
-   * Context: *User provides external docs (scientific papers, computational references, API manuals, etc.)*.
-
-2. **Knowledge Ingestion**
-
-   * Documentation is **injected into a RAG pipeline**.
-   * The RAG system is designed with **constraints**:
-
-     * The LLM **must investigate and rely on the provided knowledge** (not just hallucinate).
-     * **Iterative refinement**: the knowledge is not used as-is but progressively shaped into a usable model of the target algorithm.
-
-3. **Knowledge–Algorithm Mediation**
-
-   * The LLM interprets documentation, extracts principles, and **reframes them into computational building blocks**.
-   * Example: turning math definitions into pseudocode, then code.
-
-4. **Algorithm Synthesis**
-
-   * The LLM composes the final algorithm, ensuring it is grounded in the injected knowledge.
-   * Output: *Executable code + rationale mapping doc → algorithm*.
-
-### **Success Criteria**
-
-The system is considered successful if:
-
-* The final algorithm is **correct** and **functional**.
-* The algorithm **could not have been generated by the LLM’s baseline training alone**, but only by incorporating the injected docs.
-* There’s a **clear audit trail** showing how the external knowledge shaped the final implementation.
-
-## Resources
-* PyBigDFT documentation: bigdft.org
-* remotemanager: https://l_sim.gitlab.io/remotemanager/
-* BigDFT-school tutorials: https://github.com/BigDFT-group/bigdft-school
-* HPC resources: [to be decided]
-* LLM platforms: [to be discussed]
 
 ## Implementation - Project teams
 
 ### Team 1 – Docs + Validation
 *Curate tutorials, prepare validation tests, provide ground truth, identify doc gaps.*
 
-* **Members:** Damien, Thejan, Leonid, William, Luigi, Giuseppe
+* **Members:** Luigi, Giuseppe, Damien, William, Louis
 
 * **Main objectives:**
   * Curate and prepare documentation (BigDFT-school, remotemanager, PyBigDFT docs) for RAG ingestion.
@@ -111,7 +43,7 @@ The system is considered successful if:
 ### Team 2 – AI / Agent
 *Build RAG pipeline, define agents (domain, HPC, validator), link with validation. This group will design and test the **Immediate Augmented Knowledge Agent (IAKA)**, focusing on RAG pipelines and agent roles.*
 
-* **Members:** Tiffany, Yoann, Youssef, Leonid, William, Etienne, Abdul, Alberto, Louis,
+* **Members:** Louis, Yoann, Etienne, Youssef, William, Tiffany, Jan
 
 * **Main objectives:**
   * Design a **user interface** (e.g. Jupyter notebook + ipython magics).
@@ -153,7 +85,7 @@ The system is considered successful if:
 ### Team 3 – HPC & Workflow
 *Wrap PyBigDFT tasks, test remotemanager runs, run validation case end-to-end.*
 
-* **Members:** Luigi, Vignesh, William, ,Giuseppe, Youssef , Louis
+* **Members:** Luigi, Louis, Giuseppe, William, Youssef, Jan
 
 * **Main objectives:**
   * Wrap **PyBigDFT workflows** into remotemanager functions.
@@ -187,7 +119,7 @@ The system is considered successful if:
 ### Team 4 – Dissemination
 *Build storyboard, slides, demo, and final pitch. Here we should make sure the **story of the project is clear, engaging, and compelling** for the hackathon jury. We’ll turn the technical work of the other teams into a narrative with visuals, demos, and a strong pitch.*
 
-* **Members:** Cinthya (please confirm?), Abdul, Leonid, Giuseppe, Luigi
+* **Members:** Cinthya, Giuseppe, Louis, Leonid, Luigi
 
 * **Main objectives:**
   * Complete and maintain the **Miro board** (Motivation / Problem / Hackathon Target / Teams).
@@ -221,29 +153,18 @@ The system is considered successful if:
   * Docs+Validation  <-> AI/Agent (to align on test cases + doc ingestion)
   * AI/Agent <-> HPC (to ensure generated code actually runs with remotemanager)
 
+## Contributors
+* [Luigi Genovese](https://github.com/luigigenovese) - CEA, France
+* [Giuseppe Fisicaro](https://github.com/giuseppefisicaro) - CNR Institute for Microelectronics and Microsystems, Italy
+* [Louis Beal](https://github.com/ljbeal), INRIA, France
+* [Étienne Polack](https://github.com/epolack) - CEA, France
+* [Yoann Curè](https://github.com/Yopla38) - CEA, France
+* Damien Caliste - CEA, France
+* [William Dawson](https://github.com/william-dawson) - RIKEN Center for Computational Science, Kobe, Japan
+* [Jan Janssen](https://github.com/jan-janssen) - Max Planck Institute for Sustainable Materials - MPI-SusMat
+* [Cinthya Herrera Contreras](https://github.com/cnherrera) - CEA, France
+* Tiffany Abui Degbotse -
+* [Youssef Briki](https://github.com/youssefbriki1) - Université de Montréal, Canada
+* Leonid Didukh - Kyiv Institute of Nuclear Research, Ukraine
 
-## Validation tests
 
-### HCN test (Damien)
-
-HCN molecule frequencies. This test comes in a descriptive way and it is on purpose chosen to be implementd with the old BigDFT API, such as to challenge the capability of the framework to capture new features from the documentation. See the `titan.pdf` file.
-
-### Raman Spectra (potential future outcome)
-The task will be to build a workflow for computing raman spectra of isolated molecules. Let's first though think of all the small steps that an LLM would need to accomplish to build this workflow.
-
-First, it should be able to make the following plans:
-1) Compute the phonon modes using a finite different approximation.
-2) Compute the polarizability tensor using a series of finite field calculations.
-3) Compute the raman spectra using the previous approaches.
-4) Search the literature for reference data to compare against.
-
-The core computational tasks are:
-1) Run a single point energy calculation with BigDFT.
-2) Determine the sensitivity of the energy to the grid spacing to understand a safe minimum finite difference step.
-3) Run a single point energy calculation with BigDFT on a remote computer.
-4) Run a single point
-5) Compute an optimized geometry with BigDFT.
-6) Compute a single point energy after displacing an atom.
-7) Compute the Hessian matrix and diagonalize it to get phonon modes.
-8) Compute the polarizability tensor at displaced geometries along the phonon modes.
-9) Calculate and plot raman intensities.

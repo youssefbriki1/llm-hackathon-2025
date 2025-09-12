@@ -3,8 +3,8 @@
 set -eEuo pipefail
 
 BASE_IMAGE="docker.io/library/ubuntu:24.04"
-OUTPUT_IMAGE_NAME="ontoflow"
-OUTPUT_IMAGE_TAG="0.0.1"
+OUTPUT_IMAGE_NAME="bigdft-hackathon"
+OUTPUT_IMAGE_TAG="0.0.2"
 
 container=$(buildah from "${BASE_IMAGE}")
 echo "INFO: Started container from ${BASE_IMAGE}: ${container}"
@@ -14,7 +14,7 @@ buildah run "${container}" -- apt-get update -y
 buildah run "${container}" -- bash -c "DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt -y install tzdata"
 buildah run "${container}" -- apt-get update -y
 # python3-venv for Yoann’s code.
-buildah run "${container}" -- apt-get install -y --no-install-recommends python3 git sudo curl ca-certificates python3-venv
+buildah run "${container}" -- apt-get install -y --no-install-recommends python3 git sudo curl ca-certificates python3-venv rsync
 
 echo "INFO: Configuring image..."
 
@@ -43,13 +43,12 @@ buildah run "${container}" -- /opt/conda/bin/pip install -e PyBigDFT
 buildah config --workingdir /work "${container}"
 buildah run "${container}" -- git clone --recurse-submodules https://github.com/BigDFT-group/llm-hackathon-2025 /work/.
 buildah run "${container}" -- /opt/conda/bin/pip install -r 2-aiengine/OntoFlow/agent/requirements.txt
-# Would be better to use single source for doc.
-buildah config --workingdir /work/2-aiengine/OntoFlow "${container}"
-buildah run "${container}" -- /opt/conda/bin/python dl.py
 
-# Installing MCP
-buildah config --workingdir /work/2-aiengine/MCP-remotemanager "${container}"
-buildah run "${container}" -- /opt/conda/bin/pip install -e .
+# Installing BigDFT validator and runner
+buildah run "${container}" -- /opt/conda/bin/pip install langgraph langgraph-supervisor langchain-openai langchain dotenv remotemanager
+
+# Jupyter Lab for the interface.
+buildah run "${container}" -- /opt/conda/bin/pip install jupyterlab
 
 buildah config --workingdir /work "${container}"
 
@@ -62,5 +61,3 @@ buildah rm "${container}"
 echo "INFO: Removed temporary container: ${container}"
 
 echo "SUCCESS: OCI image built as ${OUTPUT_IMAGE_NAME}:${OUTPUT_IMAGE_TAG}"
-echo "To run a command with podman inside this image:"
-echo "podman run --rm -it ${OUTPUT_IMAGE_NAME}:${OUTPUT_IMAGE_TAG} pwd"

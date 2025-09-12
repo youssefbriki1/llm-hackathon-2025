@@ -1,0 +1,17 @@
+# Deliverable
+
+## Using the project
+
+Get the OCI image from a repository, or build it with the script `build_oci.sh`.
+
+You will need OpenAI and Anthropic keys for the setup to be fully functional:
+create in this folder create files `anthropicAI_key.txt` and `openAI_key.txt` inside
+a `keys` folder.
+
+### Jupyter notebooks
+
+Run the Jupyter from the container. In two steps to have the correct environment.
+```bash
+podman run --rm -it -v $(pwd)/keys:/work/keys -p 8888:8888 -w /work bgidft-hackathon:0.0.2 bash
+jupyter lab --ip=0.0.0.0 --no-browser --allow-root --notebook-dir=/work
+```
