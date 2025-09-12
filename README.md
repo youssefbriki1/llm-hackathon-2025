@@ -247,3 +247,20 @@ The core computational tasks are:
 7) Compute the Hessian matrix and diagonalize it to get phonon modes.
 8) Compute the polarizability tensor at displaced geometries along the phonon modes.
 9) Calculate and plot raman intensities.
+
+
+## Contributors
+* [Luigi Genovese](https://github.com/luigigenovese) - CEA, France
+* Giuseppe Fisicaro - CNR Institute for Microelectronics and Microsystems, Italy
+* Louis Beal, INRIA, France
+* Étienne Polack - CEA, France
+* Yoann Curè - CEA, France
+* Damien Caliste - CEA, France
+* William Dawson - RIKEN R-CCS, Japan
+* Jan Janssen - Max Planck Institute for Sustainable Materials - MPI-SusMat
+* Cinthya Herrera Contreras - CEA, France
+* Tiffany Abui Degbotse -
+* Youssef Briki - Université de Montréal, Canada
+* Leonid Didukh - Kyiv Institute of Nuclear Research, Ukraine
+
+
