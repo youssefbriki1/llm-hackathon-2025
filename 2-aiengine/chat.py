@@ -15,7 +15,7 @@ SYSTEM_PROMPT = """You are a helpful AI assistant that helps people find informa
 
 
 class Chat:
-    def __init__(self, model: str = "gpt-4o", system_prompt: str = SYSTEM_PROMPT):
+    def __init__(self, model: str = "gpt-5", system_prompt: str = SYSTEM_PROMPT):
         if not "OPENAI_API_KEY" in os.environ:
             os.environ["OPENAI_API_KEY"] = getpass.getpass("Please enter the OpenAI API key:")            
         
