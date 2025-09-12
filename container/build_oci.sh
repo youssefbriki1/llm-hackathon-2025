@@ -61,11 +61,3 @@ buildah rm "${container}"
 echo "INFO: Removed temporary container: ${container}"
 
 echo "SUCCESS: OCI image built as ${OUTPUT_IMAGE_NAME}:${OUTPUT_IMAGE_TAG}"
-echo "To run Jupyter:"
-launch_command=(
-  "podman run --rm -it -v $(pwd)/keys:/work/keys -p 8888:8888"
-  "-w /work"
-  "${OUTPUT_IMAGE_NAME}:${OUTPUT_IMAGE_TAG}"
-  "bash"
-)
-echo "${launch_command}"
