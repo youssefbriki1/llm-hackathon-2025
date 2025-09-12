@@ -167,7 +167,8 @@ async def remote_run_code(function_source: str,
         os.environ["BIGDFT_MPIDRYRUN"] = cache_env
     except Exception as e:
         logger.error(f"Function test execution failed: {e}")
-        raise ToolException(f"Function test execution failed. Ensure the function can be executed as-is: {e}")
+        raise ToolException(f"Function dry-run test execution failed. Ensure the function can be executed as-is: {e}")
+    finally:
 
     base_name = _generate_name(fn.name, hostname)
     ds = Dataset(
