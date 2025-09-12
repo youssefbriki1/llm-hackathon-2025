@@ -13,20 +13,45 @@ echo "INFO: Installing dependencies..."
 buildah run "${container}" -- apt-get update -y
 buildah run "${container}" -- bash -c "DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt -y install tzdata"
 buildah run "${container}" -- apt-get update -y
-buildah run "${container}" -- apt-get install -y --no-install-recommends python3 python3-pip python3-venv git
-
-# Installing Aider
-buildah config --env PATH=/root/.local/bin:$PATH "${container}"
-buildah run "${container}" -- pip install --break-system-packages aider-install
-buildah run "${container}" -- aider-install
-
+# python3-venv for Yoann’s code.
+buildah run "${container}" -- apt-get install -y --no-install-recommends python3 git sudo curl ca-certificates python3-venv
 
 echo "INFO: Configuring image..."
 
+# Installing BigDFT
+# First, because it uses its own Python.
+buildah run "${container}" -- bash -c "curl -sSL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -o /tmp/miniconda.sh && \
+    bash /tmp/miniconda.sh -b -p /opt/conda && \
+    rm /tmp/miniconda.sh"
+buildah config --env PATH=/opt/conda/bin:$PATH "${container}"
+buildah run "${container}" -- /opt/conda/bin/conda init bash
+buildah run "${container}" -- conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main
+buildah run "${container}" -- conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r
+buildah run "${container}" -- conda install -c conda-forge bigdft-suite -y
+
+# Installing Aider
+buildah config --env PATH=/root/.local/bin:$PATH "${container}"
+buildah run "${container}" -- /opt/conda/bin/pip install aider-install
+buildah run "${container}" -- /opt/conda/bin/aider-install
+
+# Installing PyBigDFT
+buildah run "${container}" -- git clone https://gitlab.com/luigigenovese/bigdft-suite.git
+buildah config --workingdir /bigdft-suite "${container}"
+buildah run "${container}" -- /opt/conda/bin/pip install -e PyBigDFT
+
+# Installing hackathon and OntoFlow
 buildah config --workingdir /work "${container}"
 buildah run "${container}" -- git clone --recurse-submodules https://github.com/BigDFT-group/llm-hackathon-2025 /work/.
+buildah run "${container}" -- /opt/conda/bin/pip install -r 2-aiengine/OntoFlow/agent/requirements.txt
+# Would be better to use single source for doc.
+buildah config --workingdir /work/2-aiengine/OntoFlow "${container}"
+buildah run "${container}" -- /opt/conda/bin/python dl.py
 
-buildah run "${container}" -- pip install --break-system-packages -r 2-aiengine/OntoFlow/agent/requirements.txt
+# Installing MCP
+buildah config --workingdir /work/2-aiengine/MCP-remotemanager "${container}"
+buildah run "${container}" -- /opt/conda/bin/pip install -e .
+
+buildah config --workingdir /work "${container}"
 
 echo "INFO: Committing the image..."
 

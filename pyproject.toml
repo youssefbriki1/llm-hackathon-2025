@@ -1,0 +1,23 @@
+[project]
+name = "llm-hackathon-2025"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "dotenv>=0.9.9",
+    "langchain>=0.3.27",
+    "langchain-community>=0.3.29",
+    "langchain-core>=0.3.76",
+    "langchain-openai>=0.3.33",
+    "langgraph>=0.6.7",
+    "langgraph-supervisor>=0.0.29",
+    "openai>=1.107.1",
+    "tenacity>=9.1.2",
+    "remote-mcp"
+]
+[tool.uv.workspace]
+members = ["2-aiengine/MCP-remotemanager"]
+
+[tool.uv.sources]
+remote-mcp = { workspace = true }
