@@ -3,8 +3,8 @@
 set -eEuo pipefail
 
 BASE_IMAGE="docker.io/library/ubuntu:24.04"
-OUTPUT_IMAGE_NAME="ontoflow"
-OUTPUT_IMAGE_TAG="0.0.1"
+OUTPUT_IMAGE_NAME="bigdft-hackathon"
+OUTPUT_IMAGE_TAG="0.0.2"
 
 container=$(buildah from "${BASE_IMAGE}")
 echo "INFO: Started container from ${BASE_IMAGE}: ${container}"
@@ -14,7 +14,7 @@ buildah run "${container}" -- apt-get update -y
 buildah run "${container}" -- bash -c "DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt -y install tzdata"
 buildah run "${container}" -- apt-get update -y
 # python3-venv for Yoann’s code.
-buildah run "${container}" -- apt-get install -y --no-install-recommends python3 git sudo curl ca-certificates python3-venv
+buildah run "${container}" -- apt-get install -y --no-install-recommends python3 git sudo curl ca-certificates python3-venv rsync
 
 echo "INFO: Configuring image..."
 
@@ -46,9 +46,15 @@ buildah run "${container}" -- /opt/conda/bin/pip install -r 2-aiengine/OntoFlow/
 
 # Installing MCP
 buildah config --workingdir /work/2-aiengine/MCP-remotemanager "${container}"
+buildah run "${container}" -- /opt/conda/bin/pip install langgraph langgraph-supervisor langchain-openai langchain dotenv remotemanager
 buildah run "${container}" -- /opt/conda/bin/pip install -e .
 
+# Jupyter Lab for the interface.
+buildah run "${container}" -- /opt/conda/bin/pip install jupyterlab
+
 buildah config --workingdir /work "${container}"
+# For Python imports to work easily from /work.
+buildah run "${container}" -- ln -s 2-aiengine aiengine
 
 echo "INFO: Committing the image..."
 
@@ -59,5 +65,11 @@ buildah rm "${container}"
 echo "INFO: Removed temporary container: ${container}"
 
 echo "SUCCESS: OCI image built as ${OUTPUT_IMAGE_NAME}:${OUTPUT_IMAGE_TAG}"
-echo "To run a command with podman inside this image:"
-echo "podman run --rm -it ${OUTPUT_IMAGE_NAME}:${OUTPUT_IMAGE_TAG} pwd"
+echo "To run Jupyter:"
+launch_command=(
+  "podman run --rm -it -v $(pwd)/keys:/work/keys -p 8888:8888"
+  "-w /work"
+  "${OUTPUT_IMAGE_NAME}:${OUTPUT_IMAGE_TAG}"
+  "/opt/conda/bin/jupyter lab --ip=0.0.0.0 --no-browser --allow-root --notebook-dir=/work"
+)
+echo "${launch_command}"

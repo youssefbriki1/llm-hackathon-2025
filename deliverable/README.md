@@ -4,7 +4,21 @@
 
 Get the OCI image from a repository, or build it with the script `build_oci.sh`.
 
-### Using OpenAI/Anthropic
+You will need OpenAI and Anthropic keys for the setup to be fully functional:
+create in this folder create files `anthropicAI_key.txt` and `openAI_key.txt` inside
+a `keys` folder.
+
+### Jupyter notebooks
+
+Run the Jupyter from the container
+```bash
+podman run --rm -it -v $(pwd)/keys:/work/keys -p 8888:8888 -w /work bgidft-hackathon:0.0.2 \
+  /opt/conda/bin/jupyter lab --ip=0.0.0.0 --no-browser --allow-root --notebook-dir=/work
+```
+
+Then open your browser to the URL indicated; you should be able to use the two notebooks.
+
+### Using OntoFlow interractively
 
 To test that everything is working, first make sure you have a `keys` folders with OpenAI
 (for embeddings) and Anthropic keys (for structured responses) and run `podman`:
