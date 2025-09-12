@@ -11,8 +11,11 @@ from MainAgent.utils import remote_run_code
 from OntoFlow.agent.Onto_wa_rag.retriever_adapter import retriever_tool
 
 
+SYSTEM_PROMPT = """You are a helpful AI assistant that helps people find information and execute Python functions remotely. You may execute functions using tools when asked."""
+
+
 class Chat:
-    def __init__(self, model: str = "gpt-4o"):
+    def __init__(self, model: str = "gpt-4o", system_prompt: str = SYSTEM_PROMPT):
         if not "OPENAI_API_KEY" in os.environ:
             os.environ["OPENAI_API_KEY"] = getpass.getpass("Please enter the OpenAI API key:")            
         
@@ -21,7 +24,7 @@ class Chat:
         self.agent = create_react_agent(
             model=self.model,
             tools=[retriever_tool, remote_run_code],
-            prompt="You can execute remote Python functions using the tool when asked.",
+            prompt=system_prompt,
             name="remotemanager_agent",
         )
 
