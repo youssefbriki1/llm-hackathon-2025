@@ -1,5 +1,11 @@
 # Dissemination
 
+Presentation:
+https://docs.google.com/presentation/d/1-hv-nbBhKG4DjjyRhkCpUC4uWLav8_El0FHW9qmI5TE/edit?usp=sharing
+
+
+
+
 LangSim video from last year:
 https://www.youtube.com/watch?v=7JFncD9WaIY
 
