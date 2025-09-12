@@ -43,9 +43,6 @@ buildah run "${container}" -- /opt/conda/bin/pip install -e PyBigDFT
 buildah config --workingdir /work "${container}"
 buildah run "${container}" -- git clone --recurse-submodules https://github.com/BigDFT-group/llm-hackathon-2025 /work/.
 buildah run "${container}" -- /opt/conda/bin/pip install -r 2-aiengine/OntoFlow/agent/requirements.txt
-# Would be better to use single source for doc.
-buildah config --workingdir /work/2-aiengine/OntoFlow "${container}"
-buildah run "${container}" -- /opt/conda/bin/python dl.py
 
 # Installing MCP
 buildah config --workingdir /work/2-aiengine/MCP-remotemanager "${container}"
