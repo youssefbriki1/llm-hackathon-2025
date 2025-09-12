@@ -1,4 +1,4 @@
-# LARA-HPC: A LAnguage model-powered Research Assistance for HPC
+# LARA-HPC: A LAnguage model-powered Research Assistant for HPC
 
 Electronic-structure codes remain challenging to use, especially on High-Performance Computing (HPC) systems where job submission and post-processing require technical expertise. LLMs are progressing rapidly as assistants, but their effectiveness depends heavily on how code and documentation are structured. Our project investigates **how to write documentation that makes scientific codes “LLM-friendly.”**
 
