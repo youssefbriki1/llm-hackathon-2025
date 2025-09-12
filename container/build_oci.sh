@@ -35,13 +35,13 @@ buildah run "${container}" -- /opt/conda/bin/pip install aider-install
 buildah run "${container}" -- /opt/conda/bin/aider-install
 
 # Installing PyBigDFT
-buildah run "${container}" -- git clone https://gitlab.com/luigigenovese/bigdft-suite.git
+buildah run "${container}" -- git clone --depth 1 https://gitlab.com/luigigenovese/bigdft-suite.git
 buildah config --workingdir /bigdft-suite "${container}"
 buildah run "${container}" -- /opt/conda/bin/pip install -e PyBigDFT
 
 # Installing hackathon and OntoFlow
 buildah config --workingdir /work "${container}"
-buildah run "${container}" -- git clone --recurse-submodules https://github.com/BigDFT-group/llm-hackathon-2025 /work/.
+buildah run "${container}" -- git clone --depth 1 --recurse-submodules https://github.com/BigDFT-group/llm-hackathon-2025 /work/.
 buildah run "${container}" -- /opt/conda/bin/pip install -r 2-aiengine/OntoFlow/agent/requirements.txt
 
 # Installing BigDFT validator and runner
