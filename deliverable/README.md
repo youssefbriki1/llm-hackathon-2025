@@ -10,10 +10,10 @@ a `keys` folder.
 
 ### Jupyter notebooks
 
-Run the Jupyter from the container
+Run the Jupyter from the container. In two steps to have the correct environment.
 ```bash
-podman run --rm -it -v $(pwd)/keys:/work/keys -p 8888:8888 -w /work bgidft-hackathon:0.0.2 \
-  /opt/conda/bin/jupyter lab --ip=0.0.0.0 --no-browser --allow-root --notebook-dir=/work
+podman run --rm -it -v $(pwd)/keys:/work/keys -p 8888:8888 -w /work bgidft-hackathon:0.0.2 bash
+jupyter lab --ip=0.0.0.0 --no-browser --allow-root --notebook-dir=/work
 ```
 
 Then open your browser to the URL indicated; you should be able to use the two notebooks.

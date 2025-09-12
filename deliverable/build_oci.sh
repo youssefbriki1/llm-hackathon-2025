@@ -53,8 +53,6 @@ buildah run "${container}" -- /opt/conda/bin/pip install -e .
 buildah run "${container}" -- /opt/conda/bin/pip install jupyterlab
 
 buildah config --workingdir /work "${container}"
-# For Python imports to work easily from /work.
-buildah run "${container}" -- ln -s 2-aiengine aiengine
 
 echo "INFO: Committing the image..."
 
@@ -70,6 +68,6 @@ launch_command=(
   "podman run --rm -it -v $(pwd)/keys:/work/keys -p 8888:8888"
   "-w /work"
   "${OUTPUT_IMAGE_NAME}:${OUTPUT_IMAGE_TAG}"
-  "/opt/conda/bin/jupyter lab --ip=0.0.0.0 --no-browser --allow-root --notebook-dir=/work"
+  "bash"
 )
 echo "${launch_command}"
