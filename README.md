@@ -15,7 +15,7 @@ By leveraging the **PyBigDFT Python API**, the **remotemanager** library for job
 ### Team 1 – Docs + Validation
 *Curate tutorials, prepare validation tests, provide ground truth, identify doc gaps.*
 
-* **Members:** Luigi, Giuseppe, Damien, Leonid, William
+* **Members:** Luigi, Giuseppe, Damien, William, Louis
 
 * **Main objectives:**
   * Curate and prepare documentation (BigDFT-school, remotemanager, PyBigDFT docs) for RAG ingestion.
