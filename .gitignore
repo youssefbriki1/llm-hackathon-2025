@@ -1,7 +1,5 @@
 .env
 main.py
-.python-version
-pyproject.toml
 __pycache__/
-uv.lock
 Tasks.md
+*.log

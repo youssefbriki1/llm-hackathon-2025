@@ -1,11 +1,23 @@
-from dataclasses import dataclass
 from langchain_core.messages import convert_to_messages
-from typing import List
+from typing import List, Any, Dict, Optional
 from langchain_core.vectorstores.in_memory import InMemoryVectorStore
 import getpass
 import os
 from dotenv import load_dotenv
+import ast
+import logging
+import anyio
+from langchain.tools import tool
+from langchain_core.tools import ToolException
+from pydantic import BaseModel, Field
 
+from remotemanager import Logger, URL, Dataset
+from remotemanager.storage.function import Function
+from remotemanager.dataset.runner import RunnerFailedError
+
+
+server_instructions = """This server provides functionality to run Python functions remotely on a specified server.
+Provide a valid python function as a string, along with the hostname of the server where the function should be executed."""
 
 load_dotenv()
 
@@ -80,3 +92,156 @@ def create_mock_retriever(docs: List[str]):
     return vectorstore.as_retriever(
         search_type="mmr", search_kwargs={"k": 2, "lambda_mult": 0.6}
     )
+
+
+logging.basicConfig(level=logging.DEBUG,
+                    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+logger = logging.getLogger("remote")
+file_handler = logging.FileHandler("remoterun.log")
+logger.addHandler(file_handler)
+Logger.level = "Debug"
+
+
+def _validate_function(function_source: str) -> None:
+    try:
+        ast.parse(function_source)
+    except SyntaxError as e:
+        logger.error(f"Unable to parse function source code: {e}")
+        raise ToolException(f"Unable to parse function source code. Ensure valid Python: {e}")
+    logger.info("Function source code is valid.")
+
+def _validate_url(hostname: str) -> URL:
+    url = URL(hostname, verbose=0)
+    try:
+        url.cmd("pwd", timeout=1, max_timeouts=1)
+    except RuntimeError as e:
+        logger.error(f"Invalid hostname or unable to connect: {e}")
+        raise ToolException(
+            f"Invalid hostname or unable to connect. Check hostname '{hostname}':\n{e}"
+        )
+    logger.info("Hostname is valid.")
+    return url
+
+def _generate_name(fn_name: str, hostname: str) -> str:
+    from datetime import datetime
+    ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+    return f"{fn_name}_{hostname}_{ts}"
+
+
+class RunCodeInput(BaseModel):
+    function_source: str = Field(
+        ...,
+        description="Full Python function source (def ...). Include any required imports inside the function."
+    )
+    hostname: str = Field(
+        ...,
+        description="Remote host to execute on."
+    )
+    function_args: Optional[Dict[str, Any]] = Field(
+        default_factory=dict,
+        description="Keyword args for the function, e.g. {'n': 10}."
+    )
+
+
+@tool("remote_run_code", args_schema=RunCodeInput)
+async def remote_run_code(function_source: str,
+                          hostname: str,
+                          function_args: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    """
+    Execute a Python function on a remote host via remotemanager and return {'Result': ...} or {'Error': ...}.
+    """
+    function_args = function_args or {}
+
+    logger.info("#### New function execution. ####")
+    _validate_function(function_source)
+    url = _validate_url(hostname)
+
+    fn = Function(function_source)
+
+    try:
+        logger.info("Testing function execution locally (dry-run).")
+        cache_env = os.environ.get("BIGDFT_MPIDRYRUN", "0")
+        os.environ["BIGDFT_MPIDRYRUN"] = "1"
+        fn(**function_args)
+        os.environ["BIGDFT_MPIDRYRUN"] = cache_env
+    except Exception as e:
+        logger.error(f"Function test execution failed: {e}")
+        raise ToolException(f"Function test execution failed. Ensure the function can be executed as-is: {e}")
+
+    base_name = _generate_name(fn.name, hostname)
+    ds = Dataset(
+        fn,
+        name=base_name,
+        local_dir=f"staging_{base_name}",
+        url=url,
+        skip=False,
+        verbose=False,
+    )
+
+    ds.append_run(args=function_args)
+    ds.run()
+
+    logger.info("Waiting for function to complete...")
+    await anyio.to_thread.run_sync(ds.wait, 1, 300)
+
+    logger.info("Fetching results.")
+    ds.fetch_results()
+
+    result = ds.results[0]
+    if isinstance(result, RunnerFailedError):
+        logger.error(f"Function execution failed: {result}")
+        return {"Error": f"Function execution failed: {result}"}
+
+    logger.info(f"Function executed successfully. Result: {result}")
+    return {"Result": str(result)}
+
+import asyncio
+
+async def async_test():
+    res = await remote_run_code.ainvoke({
+        "function_source": """def f(x):
+            return x*2""",
+        "hostname": "localhost",
+        "function_args": {"x": 21}
+    })
+    print(res)
+    
+"""
+    
+import asyncio
+from langchain_openai import ChatOpenAI
+from langgraph.prebuilt import create_react_agent
+
+async def main():
+    model = ChatOpenAI(model="gpt-4o", temperature=0)
+    agent = create_react_agent(
+        model=model,
+        tools=[remote_run_code],
+        prompt="You can execute remote Python functions using the tool when asked.",
+        name="remotemanager_agent",
+    )
+    res = await agent.ainvoke({
+        "messages": [{
+            "role": "user",
+            "content": (
+                "Use the remote_run_code tool to run this on 'localhost': "
+                "function_source='def f(x):\\n    return x*2', function_args={'x': 21}"
+            )
+        }]
+    })
+    print(res)
+
+    
+
+
+
+if __name__ == "__main__":
+    print("Async test of remote_run_code tool:")
+    asyncio.run(async_test())
+    from langchain_openai import ChatOpenAI
+    from langgraph.prebuilt import create_react_agent
+
+    print("\n\n\n\n\n\n\n\n\n --------------------------------------")
+    asyncio.run(main())
+
+"""
