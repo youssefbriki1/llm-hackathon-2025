@@ -14,7 +14,8 @@ from pydantic import BaseModel, Field
 from remotemanager import Logger, URL, Dataset
 from remotemanager.storage.function import Function
 from remotemanager.dataset.runner import RunnerFailedError
-
+from langchain_core.retrievers import BaseRetriever
+from langchain_core.documents.base import Document
 
 server_instructions = """This server provides functionality to run Python functions remotely on a specified server.
 Provide a valid python function as a string, along with the hostname of the server where the function should be executed."""
