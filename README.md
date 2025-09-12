@@ -256,7 +256,7 @@ The core computational tasks are:
 * [Étienne Polack](https://github.com/epolack) - CEA, France
 * [Yoann Curè](https://github.com/Yopla38) - CEA, France
 * Damien Caliste - CEA, France
-* [William Dawson](https://github.com/william-dawson) - RIKEN R-CCS, Japan
+* [William Dawson](https://github.com/william-dawson) - RIKEN Center for Computational Science, Kobe, Japan
 * [Jan Janssen](https://github.com/jan-janssen) - Max Planck Institute for Sustainable Materials - MPI-SusMat
 * [Cinthya Herrera Contreras](https://github.com/cnherrera) - CEA, France
 * Tiffany Abui Degbotse -
