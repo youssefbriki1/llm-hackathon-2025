@@ -98,3 +98,8 @@ tools = [retriever_tool]  # now the agent can call `notebook_retriever`
   - Ensure `init_retriever(...)` ran before the agent starts.  
   - Prompt the agent to use the `notebook_retriever` tool explicitly in early tests.
 
+Installer aider-install pour build_oci -> pip
+requirements.txt est dans agent
+fix comment on met les clés API 
+Documentation 
+ANTHROPIC_SMALL_API_KEY
