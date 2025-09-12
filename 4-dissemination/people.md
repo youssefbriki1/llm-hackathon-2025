@@ -9,6 +9,6 @@ Current list of team members (please add affiliations):
 - William Dawson - RIKEN R-CCS, Japan
 - Jan Janssen - Max Planck Institute for Sustainable Materials - MPI-SusMat
 - Cinthya Herrera Contreras - CEA, France
-- Tiffany Abui Degbotse
+- Tiffany Abui Degbotse - 
 - Youssef Briki - Université de Montréal, Canada
-- Leonid Didukh
+- Leonid Didukh - Kyiv Institute of Nuclear Research, Ukraine
