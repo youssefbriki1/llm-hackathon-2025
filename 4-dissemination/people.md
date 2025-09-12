@@ -4,7 +4,7 @@ Current list of team members (please add affiliations):
 - Giuseppe Fisicaro - CNR Institute for Microelectronics and Microsystems, Italy
 - Louis Beal, INRIA, France
 - Étienne Polack - CEA, France
-- Yoann Curè - CEA, France
+- Yoann Curé - CEA, France
 - Damien Caliste - CEA, France
 - William Dawson - RIKEN Center for Computational Science, Kobe, Japan
 - Jan Janssen - Max Planck Institute for Sustainable Materials - MPI-SusMat
