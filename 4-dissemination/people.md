@@ -1,18 +1,14 @@
-Current list of team members taken from the teams' descriptions (please correct if needed): 
+Current list of team members (please add affiliations): 
 
-- Luigi Genovese (CEA) 
-- Louis Beal (U. Rennes) 
-- Giuseppe Fisicaro ()
-- Yoan Curé (CEA) 
+- Luigi Genovese (CEA)
+- Giuseppe Fisicaro
+- Louis Beal
 - Étienne Polack (CEA)
-- Damien Caliste (CEA) 
-- Tiffany Abui Degbotse
+- Yoann Curè (CEA)
+- Damien Caliste (CEA)
 - William Dawson
-- Leonid Didukh
-- Thejan Hasaranga
-- Youssef Briki
-- Abdul Rahman
-- Alberto Marabini
-- Vignesh Kumar
-- Amey Karmarkar 
+- Jan Janssen
 - Cinthya Herrera Contreras (CEA)
+- Tiffany Abui Degbotse
+- Youssef Briki 
+- Leonid Didukh
