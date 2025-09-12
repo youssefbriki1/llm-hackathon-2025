@@ -5,7 +5,6 @@ from langgraph_supervisor import create_supervisor
 from langchain_openai import ChatOpenAI
 from pydantic import BaseModel, Field, field_validator, ConfigDict, PrivateAttr
 from typing import List, Any, Optional, Dict, Annotated
-from langchain.tools.retriever import create_retriever_tool
 from langchain_core.retrievers import BaseRetriever
 from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_core.output_parsers import PydanticOutputParser
@@ -20,12 +19,16 @@ from langchain_openai.embeddings import OpenAIEmbeddings
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import END, START, MessagesState, StateGraph
 import uuid
-from utils import pretty_print_messages, create_mock_retriever,remote_run_code
+from .utils import pretty_print_messages, create_mock_retriever,remote_run_code
 from langgraph.types import Command
 from langgraph.types import Send
 import getpass
 import os
 from dotenv import load_dotenv
+from OntoFlow.agent.Onto_wa_rag.retriever_adapter import init_retriever, retriever_tool
+
+
+# TODO: Edit this to support embedding of multiple docs 
 
 load_dotenv()
 
@@ -109,19 +112,6 @@ class RunCodeInput(BaseModel):
         extra='allow')
 
 
-@tool("remote_run_code", args_schema=RunCodeInput)
-def remoterun_tool(
-    function_source: str,
-    function_args: Optional[Dict[str, Any]] = None
-) -> Any:
-    pass
-
-@tool("remote_run_code_async", args_schema=RunCodeInput)
-async def aremoterun_tool(
-    function_source: str,
-    function_args: Optional[Dict[str, Any]] = None
-) -> Any:
-    pass
 
 
 
@@ -130,17 +120,27 @@ class PyDFTAgent(BaseModel):
     remotemanger_model: Optional[BaseChatModel] = None
     rag_model: Optional[BaseChatModel] = None
     supervisor_model: Optional[BaseChatModel] = None
-    retriever: BaseRetriever
+    #retriever: BaseRetriever
     _remotemanager_agent: Any = PrivateAttr(default=None)
     _rag_agent: Any = PrivateAttr(default=None)
     _supervisor: Any = PrivateAttr(default=None)
     _supervisor_with_description: Any = PrivateAttr(default=None)
+    
+    path:str # add validators
+    
 
     model_config = ConfigDict(
         extra='forbid',
         arbitrary_types_allowed=True, 
     )
 
+    """
+    @field_validator("path")
+    @classmethod
+    def _check_path(cls, path:str) -> str:
+        if os.is
+    """    
+        
     @field_validator("model")
     @classmethod
     def _check_model(cls, v: BaseChatModel) -> BaseChatModel:
@@ -157,11 +157,8 @@ class PyDFTAgent(BaseModel):
 
     def model_post_init(self, __context: Any) -> None:
         """Build runtime agents once the model is fully initialized."""
-        retriever_tool = create_retriever_tool(
-            retriever=self.retriever,
-            name="document_retriever",
-            description="Use this tool to retrieve relevant documents.",
-        )
+        
+        init_retriever(self.path)  
         
         rag_agent = create_react_agent(
             model=self.rag_model or self.model,
@@ -175,7 +172,7 @@ class PyDFTAgent(BaseModel):
         ) 
         remotemanager_agent = create_react_agent(
             model=self.remotemanger_model or self.model,
-            tools=[remoterun_tool, save_recall_memory, search_recall_memories, remote_run_code],
+            tools=[save_recall_memory, search_recall_memories, remote_run_code],
             prompt=(
                 "You are a Python coding assistant. Use the remote_run_code tool to execute Python functions"
                 "remotely. Write complete function definitions and call them with appropriate arguments."
@@ -259,20 +256,11 @@ class PyDFTAgent(BaseModel):
 
 if __name__ == "__main__":
     
-    
-    
-    examples = [
-        "Python is a high-level, interpreted programming language known for its readability and versatility. It supports multiple programming paradigms, including procedural, object-oriented, and functional programming. Python has a large standard library and a vibrant ecosystem of third-party packages, making it suitable for a wide range of applications such as web development, data analysis, artificial intelligence, scientific computing, and automation.",
-        "The capital of France is Paris. It is known for its rich history, culture, art, and architecture. Paris is home to iconic landmarks such as the Eiffel Tower, Louvre Museum ",
-        "The Great Wall of China is a series of fortifications that stretches over 13,000 miles across northern China. It was built to protect Chinese states and empires from invasions and raids by nomadic groups from the north. The wall is made of various materials, including stone, brick, tamped earth, and wood, and it is considered one of the most impressive architectural feats in history.",
-        "The theory of relativity, developed by Albert Einstein, consists of two main parts: special relativity and general relativity. Special relativity, published in 1905, introduced the concept that the laws of physics are the same for all non-accelerating observers and that the speed of light is constant regardless of the motion of the light source. General relativity, published in 1915, expanded on this by describing gravity as the curvature of spacetime caused by mass and energy.",
-        "Photosynthesis is the process by which green plants, algae, and some bacteria convert light energy into chemical energy stored in glucose. During photosynthesis, these organisms use sunlight to convert carbon dioxide and water into glucose and oxygen. The overall equation for photosynthesis can be summarized as: 6CO2 + 6H2O + light energy -> C6H12O6 + 6O2."
-    ]
     agent = PyDFTAgent(
         model=ChatOpenAI(model="gpt-4o", temperature=0),
-        retriever = create_mock_retriever(examples)
+        path="example/D4_02_rag_with_langchain_and_chromadb.ipynb"
     )
     agent.draw_image()
-    agent.run("tell me about python programming language")
+    agent.run("tell me about llama-server in a RAG setting")
     
     
