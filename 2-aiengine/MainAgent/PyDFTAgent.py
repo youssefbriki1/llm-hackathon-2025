@@ -20,13 +20,12 @@ from langchain_openai.embeddings import OpenAIEmbeddings
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import END, START, MessagesState, StateGraph
 import uuid
-from utils import pretty_print_messages, create_mock_retriever
+from utils import pretty_print_messages, create_mock_retriever,remote_run_code
 from langgraph.types import Command
 from langgraph.types import Send
 import getpass
 import os
 from dotenv import load_dotenv
-
 
 load_dotenv()
 
@@ -174,33 +173,15 @@ class PyDFTAgent(BaseModel):
             response_format=ResponseFormat,
             name="rag_agent",
         ) 
-        """
-        self._rag_agent = (
-            StateGraph(MessagesState)
-            .add_node(rag_agent)
-            .add_edge(START, "rag_agent")
-            .compile()
-        )
-        """
         remotemanager_agent = create_react_agent(
             model=self.remotemanger_model or self.model,
-            tools=[remoterun_tool, save_recall_memory, search_recall_memories],
+            tools=[remoterun_tool, save_recall_memory, search_recall_memories, remote_run_code],
             prompt=(
                 "You are a Python coding assistant. Use the remote_run_code tool to execute Python functions"
                 "remotely. Write complete function definitions and call them with appropriate arguments."
             ),
             name="remotemanager_agent",
         )
-        
-        """
-        self._remotemanager_agent = (
-            StateGraph(MessagesState)
-            .add_node(remotemanager_agent)
-            .add_edge(START, "remoterun_agent")
-            .compile()
-        )
-        """
-        
         assign_to_research_agent_with_description = create_task_description_handoff_tool(
             agent_name="rag_agent",
             description="",
