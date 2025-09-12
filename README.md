@@ -15,7 +15,7 @@ By leveraging the **PyBigDFT Python API**, the **remotemanager** library for job
 ### Team 1 – Docs + Validation
 *Curate tutorials, prepare validation tests, provide ground truth, identify doc gaps.*
 
-* **Members:** Damien, Thejan, Leonid, William, Luigi, Giuseppe
+* **Members:** Luigi, Giuseppe, Damien, Leonid, William
 
 * **Main objectives:**
   * Curate and prepare documentation (BigDFT-school, remotemanager, PyBigDFT docs) for RAG ingestion.
@@ -43,7 +43,7 @@ By leveraging the **PyBigDFT Python API**, the **remotemanager** library for job
 ### Team 2 – AI / Agent
 *Build RAG pipeline, define agents (domain, HPC, validator), link with validation. This group will design and test the **Immediate Augmented Knowledge Agent (IAKA)**, focusing on RAG pipelines and agent roles.*
 
-* **Members:** Tiffany, Yoann, Youssef, Leonid, William, Etienne, Abdul, Alberto, Louis,
+* **Members:** Louis, Yoann, Etienne, Youssef, William, Tiffany, Jan
 
 * **Main objectives:**
   * Design a **user interface** (e.g. Jupyter notebook + ipython magics).
@@ -85,7 +85,7 @@ By leveraging the **PyBigDFT Python API**, the **remotemanager** library for job
 ### Team 3 – HPC & Workflow
 *Wrap PyBigDFT tasks, test remotemanager runs, run validation case end-to-end.*
 
-* **Members:** Luigi, Vignesh, William, ,Giuseppe, Youssef , Louis
+* **Members:** Luigi, Louis, Giuseppe, William, Youssef, Jan
 
 * **Main objectives:**
   * Wrap **PyBigDFT workflows** into remotemanager functions.
@@ -119,7 +119,7 @@ By leveraging the **PyBigDFT Python API**, the **remotemanager** library for job
 ### Team 4 – Dissemination
 *Build storyboard, slides, demo, and final pitch. Here we should make sure the **story of the project is clear, engaging, and compelling** for the hackathon jury. We’ll turn the technical work of the other teams into a narrative with visuals, demos, and a strong pitch.*
 
-* **Members:** Cinthya (please confirm?), Abdul, Leonid, Giuseppe, Luigi
+* **Members:** Cinthya, Giuseppe, Louis, Leonid, Luigi
 
 * **Main objectives:**
   * Complete and maintain the **Miro board** (Motivation / Problem / Hackathon Target / Teams).
