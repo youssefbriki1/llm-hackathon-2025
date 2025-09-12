@@ -251,16 +251,16 @@ The core computational tasks are:
 
 ## Contributors
 * [Luigi Genovese](https://github.com/luigigenovese) - CEA, France
-* Giuseppe Fisicaro - CNR Institute for Microelectronics and Microsystems, Italy
-* Louis Beal, INRIA, France
-* Étienne Polack - CEA, France
-* Yoann Curè - CEA, France
+* [Giuseppe Fisicaro](https://github.com/giuseppefisicaro) - CNR Institute for Microelectronics and Microsystems, Italy
+* [Louis Beal](https://github.com/ljbeal), INRIA, France
+* [Étienne Polack](https://github.com/epolack) - CEA, France
+* [Yoann Curè](https://github.com/Yopla38) - CEA, France
 * Damien Caliste - CEA, France
-* William Dawson - RIKEN R-CCS, Japan
-* Jan Janssen - Max Planck Institute for Sustainable Materials - MPI-SusMat
-* Cinthya Herrera Contreras - CEA, France
+* [William Dawson](https://github.com/william-dawson) - RIKEN R-CCS, Japan
+* [Jan Janssen](https://github.com/jan-janssen) - Max Planck Institute for Sustainable Materials - MPI-SusMat
+* [Cinthya Herrera Contreras](https://github.com/cnherrera) - CEA, France
 * Tiffany Abui Degbotse -
-* Youssef Briki - Université de Montréal, Canada
+* [Youssef Briki](https://github.com/youssefbriki1) - Université de Montréal, Canada
 * Leonid Didukh - Kyiv Institute of Nuclear Research, Ukraine
 
 
