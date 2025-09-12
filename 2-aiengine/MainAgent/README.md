@@ -1,6 +1,6 @@
-# OntoFlow / MCP RemoteManager + MainAgent — Dev Guide
+# OntoFlow / MainAgent — Dev Guide
 
-This README explains how to set up the environment with **uv**, run the **MCP RemoteManager** service, and launch the **MainAgent**. It also tracks what’s done and what remains.
+This README explains how to set up the environment with **uv** and launch the **MainAgent**. It also tracks what’s done and what remains.
 
 ---
 
@@ -8,7 +8,6 @@ This README explains how to set up the environment with **uv**, run the **MCP Re
 
 - Python 3.10+  
 - [`pipx`](https://pypa.github.io/pipx/) and [`uv`](https://github.com/astral-sh/uv)
-- (Optional) `mcpo` (Model Context Protocol Orchestrator) if you’re exposing tools via MCP
 
 ### Install `uv` with `pipx`
 ```bash
@@ -22,16 +21,8 @@ pipx install uv
 
 ## Environment Setup (uv)
 
-> Use a dedicated environment inside each component you run.
+> Use a dedicated environment for MainAgent (optional but recommended).
 
-### 1)  RemoteManager
-```bash
-cd 2-aiengine/MCP-remotemanager
-uv lock
-uv sync
-```
-
-### 2) MainAgent (optional but recommended)
 ```bash
 cd 2-aiengine
 uv lock
@@ -74,7 +65,6 @@ tools = [retriever_tool]  # now the agent can call `notebook_retriever`
 - [x] VLLM integration — _to re-check in context_
 - [x] Orchestrator + Agent supervisor
 - [x] Agent memory
-- [x] LangChain tool from MCP
 
 **TODO:**
 - [ ] Further testing on the code validator (with LLM agent)
@@ -97,4 +87,3 @@ tools = [retriever_tool]  # now the agent can call `notebook_retriever`
 - **Tool not firing in the agent**  
   - Ensure `init_retriever(...)` ran before the agent starts.  
   - Prompt the agent to use the `notebook_retriever` tool explicitly in early tests.
-
