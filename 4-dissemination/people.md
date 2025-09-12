@@ -6,7 +6,7 @@ Current list of team members (please add affiliations):
 - Étienne Polack - CEA, France
 - Yoann Curè - CEA, France
 - Damien Caliste - CEA, France
-- William Dawson - RIKEN R-CCS, Japan
+- William Dawson - RIKEN Center for Computational Science, Kobe, Japan
 - Jan Janssen - Max Planck Institute for Sustainable Materials - MPI-SusMat
 - Cinthya Herrera Contreras - CEA, France
 - Tiffany Abui Degbotse - 
