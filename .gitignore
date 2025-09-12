@@ -1,5 +1,14 @@
 .env
 main.py
-__pycache__/
 Tasks.md
 *.log
+
+# checkpoint/cache files
+.ipynb_checkpoints/
+__pycache__/
+
+# execution files
+*/staging_*/
+dataset-*.yaml
+scratch/
+temp_runner_remote/
