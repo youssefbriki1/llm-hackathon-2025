@@ -14,7 +14,8 @@ dependencies = [
     "langgraph-supervisor>=0.0.29",
     "openai>=1.107.1",
     "tenacity>=9.1.2",
-    "remote-mcp"
+    "remote-mcp",
+    "sentence-transformers>=5.1.0",
 ]
 [tool.uv.workspace]
 members = ["2-aiengine/MCP-remotemanager"]
