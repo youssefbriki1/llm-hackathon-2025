@@ -74,23 +74,15 @@ uv add --dev   ipython ipykernel jupyter-client jupyter-core   pytest pytest-cov
 
 #### 4. Project-specific dependencies
 
-Navigate into the OntoFlow RAG agent:
+Navigate into the OntoFlow RAG agent, and install requirements and add missing dependencies:
 
 ```bash
 cd 2-aiengine/OntoFlow/agent/Onto_wa_rag
-```
-
-Install requirements and add missing dependencies:
-
-```bash
-# If your repo includes a requirements.txt here, install it:
 uv add -r requirements.txt
 
-# For Fortran parsing & AST
 uv add open-fortran-parser
 uv add tree_sitter
 
-# If you plan to use local GGUF models via llama.cpp
 uv add llama-cpp-python
 ```
 
