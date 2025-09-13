@@ -33,7 +33,7 @@ Follow these steps to set up the environment.
 #### 1. Create and activate the virtual environment
 
 ```bash
-uv venv --python=python3.11 
+uv init
 ```
 
 > **Note:** `setuptools` is required when working with a `uv` virtual environment.
