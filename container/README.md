@@ -18,5 +18,5 @@ jupyter lab --ip=0.0.0.0 --no-browser --allow-root --notebook-dir=/work
 
 
 You will have access to this repository in `/work`. You can then launch the two notebooks of this folder
-* `ontoflow.ipynb` to have access to grounded code generation using RAG on documentation for PyBigDFT (OpenAI/Anthropic);
-* `bigdft_validator.ipynb` to use the validator/executor of the generated code (OpenAI).
+* [`ontoflow.ipynb`](ontoflow.ipynb) to have access to grounded code generation using RAG on documentation for BigDFT Python package (OpenAI/Anthropic);
+* [`bigdft_validator.ipynb`](bigdft_validator.ipynb) to use the validator/executor of the generated code (OpenAI).
