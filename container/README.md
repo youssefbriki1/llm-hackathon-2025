@@ -5,8 +5,7 @@
 Get the OCI image from a repository, or build it with the script `build_oci.sh`.
 
 You will need OpenAI and Anthropic keys for the setup to be fully functional:
-create in this folder create files `anthropicAI_key.txt` and `openAI_key.txt` inside
-a `keys` folder.
+create files `anthropicAI_key.txt` and `openAI_key.txt` inside a `keys` folder.
 
 ### Jupyter notebooks
 
