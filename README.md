@@ -86,6 +86,15 @@ uv add tree_sitter
 uv add llama-cpp-python
 ```
 
+Place your OpenAI API key and Anthropic API key in two files.
+```bash
+cd 2-aiengine/OntoFlow/
+mkdir keys
+echo "sk-YourSuperSecretApiKey" > keys/openAI_key.txt
+echo "sk-YourSuperSecretApiKey" > keys/anthropicAI_key.txt
+```
+
+
 ### Notebooks demos
 
 Check the following files to see some demo of the project: 2-aiengine/demo.ipynb and 2-aiengine/OntoFlow/demo_.ipynb
