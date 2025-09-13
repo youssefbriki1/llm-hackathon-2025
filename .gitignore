@@ -13,3 +13,4 @@ __pycache__/
 dataset-*.yaml
 scratch/
 temp_runner_remote/
+uv.lock

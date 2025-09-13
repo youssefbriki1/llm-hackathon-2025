@@ -26,6 +26,10 @@ import getpass
 import os
 from dotenv import load_dotenv
 from OntoFlow.agent.Onto_wa_rag.retriever_adapter import init_retriever, retriever_tool
+from langchain_core.messages import HumanMessage, AIMessage, ToolMessage
+from .rag_graph_pyd import build_rag_graph, DocSpec
+import asyncio
+from pathlib import Path
 
 
 # TODO: Edit this to support embedding of multiple docs 
@@ -100,19 +104,6 @@ class ResponseFormat(BaseModel):
 
 # Remoterun tools 
 
-class RunCodeInput(BaseModel):
-    """Execute a Python function remotely via MCP RemoteRun."""
-    function_source: str = Field(..., description="Full Python function source (def ...).")
-    #hostname: str = Field("localhost", description="Remote host to run the function on.")
-    function_args: Optional[Dict[str, Any]] = Field(
-        default_factory=dict,
-        description="Keyword args passed to your function."
-    )
-    model_config = ConfigDict(
-        extra='allow')
-
-
-
 
 
 class PyDFTAgent(BaseModel):
@@ -148,79 +139,114 @@ class PyDFTAgent(BaseModel):
             raise ValueError("model cannot be empty")
         return v
 
-    @field_validator("retriever")
-    @classmethod
-    def _check_retriever(cls, v: BaseRetriever) -> BaseRetriever:
-        if v is None:
-            raise ValueError("retriever cannot be empty")
-        return v
 
     def model_post_init(self, __context: Any) -> None:
-        """Build runtime agents once the model is fully initialized."""
         
-        init_retriever(self.path)  
+        # Initialize retriever
+        rag = OntoRAG(
+            storage_dir=STORAGE_DIR,
+            chunk_size=CHUNK_SIZE,
+            chunk_overlap=CHUNK_OVERLAP,
+            ontology_path=ONTOLOGY_PATH_TTL
+        )
+
+        await rag.initialize()
         
-        rag_agent = create_react_agent(
-            model=self.rag_model or self.model,
-            tools=[retriever_tool, save_recall_memory, search_recall_memories],
-            prompt=(
-                "You are a research assistant. Use the retriever tool to find relevant information "
-                "from the provided documents to help answer user queries."
-            ),
-            response_format=ResponseFormat,
-            name="rag_agent",
-        ) 
+        
+        # Embed docs:
+        
+        
+        
         remotemanager_agent = create_react_agent(
             model=self.remotemanger_model or self.model,
             tools=[save_recall_memory, search_recall_memories, remote_run_code],
             prompt=(
-                "You are a Python coding assistant. Use the remote_run_code tool to execute Python functions"
+                "You are a Python coding assistant. Use the remote_run_code tool to execute Python functions "
                 "remotely. Write complete function definitions and call them with appropriate arguments."
             ),
             name="remotemanager_agent",
         )
+
+        rag_app = build_rag_graph()
+
+        def _latest_human_question(state: Dict[str, Any]) -> Optional[str]:
+            for msg in reversed(state.get("messages", [])):
+                if isinstance(msg, HumanMessage):
+                    c = msg.content if isinstance(msg.content, str) else ""
+                    if c.strip():
+                        return c.strip()
+            return None
+
+        async def rag_graph_node(state: Dict[str, Any]) -> Dict[str, Any]:
+            q = _latest_human_question(state) or state.get("query", "")
+            docs_raw: List[Dict[str, Any]] = state.get("docs", []) or []
+            docs = [d if isinstance(d, DocSpec) else DocSpec(**d) for d in docs_raw]
+            rag_in = {"query": q, "docs": [d.model_dump() for d in docs]}
+            rag_out: Dict[str, Any] = await rag_app.ainvoke(rag_in)
+            ans = (rag_out or {}).get("answer", "") or ""
+            srcs = (rag_out or {}).get("sources", []) or []
+            return {"rag_answer": ans, "rag_sources": srcs, "messages": [AIMessage(content=ans)]}
+
+        async def submit_rag_to_remotemanager(state: Dict[str, Any], hostname: str = "localhost") -> Dict[str, Any]:
+            ans: str = state.get("rag_answer", "") or ""
+            srcs: List[Dict[str, Any]] = state.get("rag_sources", []) or []
+            function_source = """
+    def handle_rag_result(answer: str, sources: list, metadata: dict | None = None):
+        return {
+            "ok": True,
+            "answer_len": len(answer),
+            "source_count": len(sources),
+            "preview": answer[:200],
+            "metadata": (metadata or {})
+        }
+    """
+            args = {
+                "function_source": function_source,
+                "hostname": hostname,
+                "function_args": {"answer": ans, "sources": srcs, "metadata": {"origin": "langgraph", "pipeline": "ontoRAG->remotemanager"}},
+            }
+            tool_result = await remote_run_code.ainvoke(args)
+            tool_msg = ToolMessage(content=str(tool_result), tool_call_id="rag_submit")
+            return {"remotemanager_result": tool_result, "messages": [tool_msg]}
+
         assign_to_research_agent_with_description = create_task_description_handoff_tool(
             agent_name="rag_agent",
-            description="",
+            description="Use the OntoRAG research assistant to answer document questions.",
         )
 
         assign_to_math_agent_with_description = create_task_description_handoff_tool(
-            agent_name="remoterun_agent",
-            description="",
+            agent_name="remotemanager_agent",
+            description="Use RemoteRun to execute Python code on a remote host.",
         )
 
         supervisor_agent_with_description = create_react_agent(
             model=self.supervisor_model or self.model,
-            tools=[
-                assign_to_research_agent_with_description,
-                assign_to_math_agent_with_description,
-                save_recall_memory, 
-                search_recall_memories
-            ],
+            tools=[assign_to_research_agent_with_description, assign_to_math_agent_with_description, save_recall_memory, search_recall_memories],
             prompt=(
-                "You are a supervisor managing two agents:\n"
-                "- a RAG agent. Assign research-related tasks to this assistant\n"
-                "- a RemoteRun agent. Assign code execution tasks to this assistant\n"
-                "Assign work to one agent at a time, do not call agents in parallel.\n"
-                "Do not do any work yourself."
+                "You are a supervisor managing two assistants:\n"
+                "- 'rag_agent' (OntoRAG) for research over code/docs.\n"
+                "- 'remotemanager_agent' for remote code execution via RemoteRun.\n"
+                "Assign one assistant at a time. Do not do tasks yourself."
             ),
             name="supervisor",
         )
 
         self._supervisor_with_description = (
             StateGraph(MessagesState)
-            .add_node(
-                supervisor_agent_with_description, destinations=("rag_agent", "remotemanager_agent")
-            )
-            .add_node(rag_agent)
-            .add_node(remotemanager_agent)
+            .add_node(supervisor_agent_with_description, destinations=("rag_agent", "remotemanager_agent"))
+            .add_node("rag_agent", rag_graph_node)
+            .add_node("submit_rag_to_remotemanager", submit_rag_to_remotemanager)
+            .add_node("remotemanager_agent", remotemanager_agent)
             .add_edge(START, "supervisor")
-            .add_edge("rag_agent", "supervisor")
+            .add_edge("rag_agent", "submit_rag_to_remotemanager")
+            .add_edge("submit_rag_to_remotemanager", "supervisor")
             .add_edge("remotemanager_agent", "supervisor")
             .compile()
         )
 
-        
+
+
+
 
     @property
     def rag_agent(self):
@@ -239,28 +265,23 @@ class PyDFTAgent(BaseModel):
             f.write(self._supervisor_with_description.get_graph().draw_mermaid_png())
 
     
-    def run(self, user_input: str):
-        for chunk in self._supervisor_with_description.stream(
-                {
-                    "messages": [
-                        {
-                            "role": "user",
-                            "content": user_input,
-                        }
-                    ]
-                },
-                subgraphs=True, verbose=True):
+    async def arun(self, user_input: str):
+        async for chunk in self._supervisor_with_description.astream(
+            {"messages": [{"role": "user", "content": user_input}]},
+            subgraphs=True, verbose=True
+        ):
             pretty_print_messages(chunk, last_message=True)
+
+    def run(self, user_input: str):
+        asyncio.run(self.arun(user_input))
 
 
 
 if __name__ == "__main__":
-    
     agent = PyDFTAgent(
         model=ChatOpenAI(model="gpt-4o", temperature=0),
-        path="example/D4_02_rag_with_langchain_and_chromadb.ipynb"
+        path="",
     )
     agent.draw_image()
-    agent.run("tell me about llama-server in a RAG setting")
-    
+    agent.run("")
     
