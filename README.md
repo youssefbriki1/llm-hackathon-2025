@@ -19,7 +19,7 @@ docker pull ghcr.io/epolack/llm-hackathon-2025:0.0.2
 and to run Jupyter from within.
 See the [container](container) folder for a bit more details.
 
-If you want to setup your environment, you can look at how the container is [build](container/build_oci.sh).
+If you want to setup your environment, you can look at how the container is [built](container/build_oci.sh).
 You will find inside it the simple step to build the image to use GPU instead of only using CPU.
 This enables the use of more powerful embedding models for the RAG.
 
