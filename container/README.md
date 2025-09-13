@@ -2,7 +2,7 @@
 
 ## Using the project
 
-Get the OCI image from a repository, or build it with the script `build_oci.sh`.
+Get the OCI (Docker) image from a registry, or build it with the script `build_oci.sh` using Buildah.
 
 You will need OpenAI and Anthropic keys for the setup to be fully functional:
 create files `anthropicAI_key.txt` and `openAI_key.txt` inside a `keys` folder.
