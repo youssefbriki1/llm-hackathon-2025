@@ -4,7 +4,7 @@ set -eEuo pipefail
 
 BASE_IMAGE="docker.io/library/ubuntu:24.04"
 OUTPUT_IMAGE_NAME="bigdft-hackathon"
-OUTPUT_IMAGE_TAG="0.0.2"
+OUTPUT_IMAGE_TAG="0.0.3"
 
 container=$(buildah from "${BASE_IMAGE}")
 echo "INFO: Started container from ${BASE_IMAGE}: ${container}"
@@ -20,19 +20,12 @@ echo "INFO: Configuring image..."
 
 # Installing BigDFT
 # First, because it uses its own Python.
-buildah run "${container}" -- bash -c "curl -sSL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -o /tmp/miniconda.sh && \
-    bash /tmp/miniconda.sh -b -p /opt/conda && \
-    rm /tmp/miniconda.sh"
-buildah config --env PATH=/opt/conda/bin:$PATH "${container}"
+buildah run "${container}" -- bash -c "curl -sSL https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh -o /tmp/mambaforge.sh && \
+    bash /tmp/mambaforge.sh -b -p /opt/conda && \
+    rm /tmp/mambaforge.sh"
+buildah config --env PATH=/opt/mamba/bin:$PATH "${container}"
 buildah run "${container}" -- /opt/conda/bin/conda init bash
-buildah run "${container}" -- conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main
-buildah run "${container}" -- conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r
-buildah run "${container}" -- conda install -c conda-forge bigdft-suite -y
-
-# Installing Aider
-buildah config --env PATH=/root/.local/bin:$PATH "${container}"
-buildah run "${container}" -- /opt/conda/bin/pip install aider-install
-buildah run "${container}" -- /opt/conda/bin/aider-install
+buildah run "${container}" -- /opt/conda/bin/conda install -c conda-forge bigdft-suite -y
 
 # Installing PyBigDFT
 buildah run "${container}" -- git clone --depth 1 https://gitlab.com/luigigenovese/bigdft-suite.git
@@ -41,7 +34,13 @@ buildah run "${container}" -- /opt/conda/bin/pip install -e PyBigDFT
 
 # Installing hackathon and OntoFlow
 buildah config --workingdir /work "${container}"
-buildah run "${container}" -- git clone --depth 1 --recurse-submodules https://github.com/BigDFT-group/llm-hackathon-2025 /work/.
+#buildah run "${container}" -- git clone --depth 1 --recurse-submodules https://github.com/BigDFT-group/llm-hackathon-2025 /work/.  # Cuda version of Ontoflow.
+buildah run "${container}" -- git clone --depth 1 https://github.com/BigDFT-group/llm-hackathon-2025 /work/.
+buildah run --workingdir /work "${container}" -- bash -c \
+ "git submodule update --init --recursive --depth 1 && \
+  cd 2-aiengine/OntoFlow && \
+  git fetch --depth 1 origin cpu && \
+  git checkout -b cpu FETCH_HEAD"
 buildah run "${container}" -- /opt/conda/bin/pip install -r 2-aiengine/OntoFlow/agent/requirements.txt
 
 # Installing BigDFT validator and runner
