@@ -10,6 +10,19 @@ By leveraging the **PyBigDFT Python API**, the **remotemanager** library for job
 * **For the hackathon:** A case study showing that the quality of documentation can be as important as the quality of code in enabling AI-assisted discovery.
 * **Long-term vision:** Documentation practices derived here could generalize to other simulation packages (chemistry, materials, physics).
 
+## Quick start
+
+The easiest way to try the code is to run the OCI (Docker) image at
+```
+docker pull ghcr.io/epolack/llm-hackathon-2025:0.0.2
+```
+and to run Jupyter from within.
+See the [container](container) folder for a bit more details.
+
+If you want to setup your environment, you can look at how the container is [build](container/build_oci.sh).
+You will find inside it the simple step to build the image to use GPU instead of only using CPU.
+This enables the use of more powerful embedding models for the RAG.
+
 ## Implementation - Project teams
 
 ### Team 1 – Docs + Validation
