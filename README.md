@@ -23,6 +23,80 @@ If you want to setup your environment, you can look at how the container is [bui
 You will find inside it the simple step to build the image to use GPU instead of only using CPU.
 This enables the use of more powerful embedding models for the RAG.
 
+
+## Installation Instructions
+
+Follow these steps to set up the environment.
+
+---
+
+#### 1. Create and activate the virtual environment
+
+```bash
+uv venv --python=python3.11 
+```
+
+> **Note:** `setuptools` is required when working with a `uv` virtual environment.
+
+```bash
+uv pip install setuptools
+```
+
+---
+
+#### 2. Build and configure BigDFT
+
+```bash
+git clone https://gitlab.com/luigigenovese/bigdft-suite.git
+cd bigdft-suite
+mkdir build
+cd build
+../bundler/jhbuild.py -f ../rcfiles/jhbuildrc build
+
+source install/bin/bigdftvars.sh
+```
+
+---
+
+#### 3. Install development dependencies
+
+```bash
+uv add --dev   ipython ipykernel jupyter-client jupyter-core   pytest pytest-cov pytest-xdist nbval   sphinx sphinx-rtd-theme nbsphinx nbconvert nbformat   pre-commit ruff rich   mcp remotemanager sse-starlette uvicorn typer
+```
+
+---
+
+#### 4. Project-specific dependencies
+
+Navigate into the OntoFlow RAG agent:
+
+```bash
+cd 2-aiengine/OntoFlow/agent/Onto_wa_rag
+```
+
+Install requirements and add missing dependencies:
+
+```bash
+# If your repo includes a requirements.txt here, install it:
+uv add -r requirements.txt
+
+# For Fortran parsing & AST
+uv add open-fortran-parser
+uv add tree_sitter
+
+# If you plan to use local GGUF models via llama.cpp
+uv add llama-cpp-python
+```
+
+### Notebooks demos
+
+Check the following files to see some demo of the project: 2-aiengine/demo.ipynb
+
+### Agentic Langchain Integration
+
+IN PROGRESS - Would be able to bridge between the RAG and the remotemanager to run code on remote HPC system without any human intervention.
+
+
 ## Implementation - Project teams
 
 ### Team 1 – Docs + Validation
