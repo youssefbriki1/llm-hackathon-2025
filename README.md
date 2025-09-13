@@ -2,8 +2,14 @@
 
 Electronic-structure codes remain challenging to use, especially on High-Performance Computing (HPC) systems where job submission and post-processing require technical expertise. LLMs are progressing rapidly as assistants, but their effectiveness depends heavily on how code and documentation are structured. Our project investigates **how to write documentation that makes scientific codes “LLM-friendly.”**
 
-We propose to build an LLM-driven research assistant that can run realistic electronic-structure simulations on HPC systems using the **BigDFT** code. Instead of designing a new agent framework, our focus is to explore how **documentation and code structure** affect the ability of LLMs to understand, extend and orchestrate workflows.
-By leveraging the **PyBigDFT Python API**, the **remotemanager** library for job submission, and the **BigDFT-school** educational repository, we will test how well models can autonomously perform tasks such as computing atomisation energies or vibrational spectra. Our hypothesis: **a codebase with clean, Pythonic APIs and high-quality documentation will enable LLMs to perform complex tasks with minimal intervention.**
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=JnzZdvAyA9A">
+    <img src="https://img.youtube.com/vi/JnzZdvAyA9A/0.jpg" alt="LARA-HPC Video" width="400">
+  </a>
+</p>
+
+We propose to build an LLM-driven research assistant that can run realistic electronic-structure simulations on HPC systems using the [**BigDFT**](https://l_sim.gitlab.io/bigdft-doc/) code. Instead of designing a new agent framework, our focus is to explore how **documentation and code structure** affect the ability of LLMs to understand, extend and orchestrate workflows.
+By leveraging the [**PyBigDFT Python API**](https://bigdft-suite.readthedocs.io/en/latest/), the [**remotemanager**](https://l_sim.gitlab.io/remotemanager/) library for job submission, and the [**BigDFT-school**](https://github.com/BigDFT-group/bigdft-school) educational repository, we will test how well models can autonomously perform tasks such as computing atomisation energies or vibrational spectra. Our hypothesis: **a codebase with clean, Pythonic APIs and high-quality documentation will enable LLMs to perform complex tasks with minimal intervention.**
 
 * **For researchers:** Reduce the barrier to using electronic-structure codes on HPC and open new research paradigma enabled by the seamlessly integration of LLM.
 * **For developers:** Concrete guidelines on how to structure documentation so that AI agents can effectively interact with complex scientific codes.
