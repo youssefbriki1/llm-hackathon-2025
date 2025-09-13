@@ -96,13 +96,11 @@ uv add llama-cpp-python
 
 ### Notebooks demos
 
-Check the following files to see some demo of the project: 2-aiengine/demo.ipynb
+Check the following files to see some demo of the project: 2-aiengine/demo.ipynb and 2-aiengine/OntoFlow/demo_.ipynb
 
 ### Agentic Langchain Integration
 
 IN PROGRESS - Would be able to bridge between the RAG and the remotemanager to run code on remote HPC system without any human intervention.
-
-
 
 ## Contributors
 * [Luigi Genovese](https://github.com/luigigenovese) - CEA, France
