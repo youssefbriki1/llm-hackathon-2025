@@ -9,6 +9,8 @@ from langchain_core.messages.human import HumanMessage
 
 from MainAgent.utils import remote_run_code
 from OntoFlow.agent.Onto_wa_rag.retriever_adapter import retriever_tool
+from OntoFlow.agent.Onto_wa_rag.provider.get_key import get_openai_key
+from OntoFlow.agent.Onto_wa_rag.CONSTANT import API_KEY_PATH
 
 
 SYSTEM_PROMPT = """You are a helpful AI assistant that helps people find information and execute Python functions remotely. You may execute functions using tools when asked."""
@@ -17,7 +19,10 @@ SYSTEM_PROMPT = """You are a helpful AI assistant that helps people find informa
 class Chat:
     def __init__(self, model: str = "gpt-5", system_prompt: str = SYSTEM_PROMPT):
         if not "OPENAI_API_KEY" in os.environ:
-            os.environ["OPENAI_API_KEY"] = getpass.getpass("Please enter the OpenAI API key:")            
+            openai_key = get_openai_key(api_key_path=API_KEY_PATH)
+            if openai_key == "":
+                openai_key = getpass.getpass("Please enter the OpenAI API key:")
+            os.environ["OPENAI_API_KEY"] = openai_key
         
         # create the agent
         self.model = ChatOpenAI(model=model, temperature=0)
