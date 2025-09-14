@@ -97,7 +97,7 @@ echo "sk-YourSuperSecretApiKey" > keys/anthropicAI_key.txt
 
 ### Notebooks demos
 
-Check the following files to see some demo of the project: 2-aiengine/demo.ipynb and 2-aiengine/OntoFlow/demo_.ipynb
+Check the following files to see some demo of the project: 2-aiengine/full_demo.ipynb
 
 ### Agentic Langchain Integration
 
