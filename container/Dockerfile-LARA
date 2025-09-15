@@ -15,7 +15,7 @@ RUN apt-get update -y && \
     apt-get install -y --no-install-recommends tzdata && \
     apt-get update -y && \
     apt-get install -y --no-install-recommends \
-        python3 git sudo curl ca-certificates python3-venv rsync bash \
+        python3 git sudo curl ca-certificates python3-venv rsync bash ssh \
     && rm -rf /var/lib/apt/lists/*
 
 # Use bash as default shell for RUN to allow conda activation style commands if needed
@@ -41,7 +41,7 @@ RUN /opt/conda/bin/pip install -e PyBigDFT
 
 # ---- Hackathon repo + OntoFlow (CPU branch) ----
 WORKDIR /work
-RUN git clone --depth 1 https://github.com/BigDFT-group/llm-hackathon-2025 /work/. && \
+RUN git clone --depth 1  https://github.com/BigDFT-group/llm-hackathon-2025 /work/. && \
     git submodule update --init --recursive --depth 1 && \
     cd 2-aiengine/OntoFlow && \
     git fetch --depth 1 origin cpu && \
@@ -66,6 +66,6 @@ WORKDIR /work
 
 # Expose Jupyter (optional)
 EXPOSE 8888
-
+EXPOSE 11434
 # Default command
 CMD ["jupyter", "lab", "--ip=0.0.0.0", "--no-browser", "--allow-root", "--NotebookApp.token="]
