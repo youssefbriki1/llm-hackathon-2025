@@ -14,7 +14,7 @@ Run the Jupyter from the container. In two steps to have the correct environment
 # if using prebuilt container
 docker run --rm -it -v $(pwd)/keys:/work/keys -p 8888:8888 -w /work ghcr.io/epolack/llm-hackathon-2025:0.0.2 bash
 
-# if you built the container using tthe build_oci.sh script (check the script output)
+# if you built the container using the build_oci.sh script (check the script output)
 docker run --rm -it -v $(pwd)/keys:/work/keys -p 8888:8888 -w bigdft-hackathon:0.0.3 bash
 jupyter lab --ip=0.0.0.0 --no-browser --allow-root --notebook-dir=/work
 ```
