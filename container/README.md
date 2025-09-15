@@ -11,8 +11,8 @@ create files `anthropicAI_key.txt` and `openAI_key.txt` inside a `keys` folder.
 
 Run the Jupyter from the container. In two steps to have the correct environment.
 ```bash
-docker run --rm -it -v $(pwd)/keys:/work/keys -p 8888:8888 -w /work bgidft-hackathon:0.0.2 bash
-jupyter lab --ip=0.0.0.0 --no-browser --allow-root --NotebookApp.token="" --notebook-dir=/work
+docker run --rm -it -v $(pwd)/keys:/work/keys -p 8888:8888 -w /work ghcr.io/epolack/llm-hackathon-2025:0.0.2 bash
+jupyter lab --ip=0.0.0.0 --no-browser --allow-root --notebook-dir=/work
 ```
 (If you want to use `podman` instead, just substitute `docker` with `podman`.)
 
