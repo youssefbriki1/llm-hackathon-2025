@@ -16,7 +16,7 @@ docker run --rm -it -v $(pwd)/keys:/work/keys -p 8888:8888 -w /work ghcr.io/epol
 
 # if you built the container using the build_oci.sh script (check the script output)
 docker run --rm -it -v $(pwd)/keys:/work/keys -p 8888:8888 -w bigdft-hackathon:0.0.3 bash
-jupyter lab --ip=0.0.0.0 --no-browser --allow-root --notebook-dir=/work
+jupyter lab --ip=0.0.0.0 --no-browser --allow-root --NotebookApp.token="" --notebook-dir=/work
 ```
 (If you want to use `podman` instead, just substitute `docker` with `podman`.)
 
