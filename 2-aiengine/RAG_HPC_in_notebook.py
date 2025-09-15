@@ -460,7 +460,7 @@ class OntoRAGMagic(Magics):
                 display(Markdown(f"""### 🚀 Start the HPC agent..."""))
                 chat = Chat(model="gpt-5")
                 message = f"""
-                Use the remote_run_code tool to run the following python function on 'robin-ubuntu':
+                Use the remote_run_code tool to run the following python function on 'localhost':
                 function_source='{extracted_code}, with function_args={{}}'
                 """
 
